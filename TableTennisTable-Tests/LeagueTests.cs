@@ -67,5 +67,39 @@ namespace TableTennisTable_Tests
             var rows = league.GetRows();
             Assert.AreEqual(2, rows.Count);
         }
+
+        [TestMethod]
+        public void TestRecordWin()
+        {
+            // Given
+            League league = new League();
+
+            // When
+            league.AddPlayer("Bob");
+            league.AddPlayer("Ray");
+            league.AddPlayer("Geoff");
+            league.RecordWin("Geoff", "Bob");
+
+            // Then
+            var winner = league.GetWinner();
+            Assert.AreEqual("Geoff", winner);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException),
+            "Cannot record match result. Winner {winner} must be one row below loser {loser}")]
+        public void TestRecordWinWhereRowsBetweenPlayersTooGreat()
+        {
+            //Given
+            League league = new League();
+
+            // When
+            league.AddPlayer("Bob");
+            league.AddPlayer("Ray");
+            league.AddPlayer("Geoff");
+            league.AddPlayer("Bill");
+            league.RecordWin("Bill", "Bob");
+
+        }
     }
 }
