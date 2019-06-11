@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TableTennisTable_CSharp;
 
@@ -22,6 +24,48 @@ namespace TableTennisTable_Tests
             var firstRowPlayers = rows.First().GetPlayers();
             Assert.AreEqual(1, firstRowPlayers.Count);
             CollectionAssert.Contains(firstRowPlayers, "Bob");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException),
+            "Cannot add player Bob because they are already in the game")]
+        public void TestAddDuplicatePlayer()
+        {
+            //Given
+            League league = new League();
+
+            // When
+            league.AddPlayer("Bob");
+            league.AddPlayer("Bob");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException),
+            "Player name %%% contains invalid")]
+        public void TestAddPlayerNameWithInvalidCharacters()
+        {
+            //Given
+            League league = new League();
+
+            // When
+            league.AddPlayer("%%%");
+           
+        }
+
+        [TestMethod]
+        public void TestGetRows()
+        {
+            // Given
+            League league = new League();
+
+            // When
+            league.AddPlayer("Bob");
+            league.AddPlayer("Ray");
+            league.AddPlayer("Geoff");
+
+            // Then
+            var rows = league.GetRows();
+            Assert.AreEqual(2, rows.Count);
         }
     }
 }
