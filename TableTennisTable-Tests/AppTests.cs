@@ -20,5 +20,27 @@ namespace TableTennisTable_Tests
 
             Assert.AreEqual("Rendered League", app.SendCommand("print"));
         }
+
+        [TestMethod]
+        public void TestAddPlayer()
+        {
+            var league = new League();
+            var renderer = new Mock<ILeagueRenderer>();
+            renderer.Setup(r => r.Render(league)).Returns("Rendered League");
+
+            var app = new App(league, renderer.Object, null);
+
+            app.SendCommand("add player Alice");
+
+            var rows = league.GetRows();
+            var firstRowPlayers = rows.First().GetPlayers();
+            CollectionAssert.Contains(firstRowPlayers, "Alice");
+        }
+
+        [TestMethod]
+        public void TestWinner()
+        {
+
+        }
     }
 }
