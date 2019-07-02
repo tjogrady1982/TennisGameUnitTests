@@ -10,6 +10,7 @@ namespace TableTennisTable_Tests
     {
         // Current app instance
         private App app;
+        private League league;
 
         // Last response
         private String response;
@@ -17,7 +18,7 @@ namespace TableTennisTable_Tests
         [BeforeScenario]
         public void CreateApp()
         {
-            var league = new League();
+            league = new League();
             var leagueRenderer = new LeagueRenderer();
             var fileService = new FileService();
             app = new App(league, leagueRenderer, fileService);
@@ -28,7 +29,12 @@ namespace TableTennisTable_Tests
         {
             // Nothing to do - the default league starts with no players
         }
-        
+        [Given("the league has one player added")]
+        public void GivenTheLeagueHasOnePlayerAdded()
+        {
+            league.AddPlayer("Anne");
+
+        }
         [When("I print the league")]
         public void WhenIPrintTheLeague()
         {
@@ -37,6 +43,12 @@ namespace TableTennisTable_Tests
 
         [Then("I should see \"(.*)\"")]
         public void ThenIShouldSeeThatThereAreNoPlayers(string expected)
+        {
+            Assert.AreEqual(expected, response);
+        }
+
+        [Then("I should have one player")]
+        public void ThenIShouldHaveOnePlayer(string expected = "Anne")
         {
             Assert.AreEqual(expected, response);
         }
